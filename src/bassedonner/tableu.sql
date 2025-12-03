@@ -60,3 +60,5 @@ VALUES  (1, 1),
         (5, 3);  
 
 
+
+SELECT * FROM cours 

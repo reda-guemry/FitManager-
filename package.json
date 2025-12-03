@@ -1,6 +1,24 @@
 {
+  "name": "fitmanager-",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/reda-guemry/FitManager-#readme",
+  "bugs": {
+    "url": "https://github.com/reda-guemry/FitManager-/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reda-guemry/FitManager-.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.17",
+    "@tailwindcss/cli": "^4.1.17",
     "tailwindcss": "^4.1.17"
   }
 }
