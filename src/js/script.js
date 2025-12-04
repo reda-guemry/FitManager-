@@ -3,7 +3,7 @@ let butadd = document.querySelector("#addCours") ;
 let closmdol = document.querySelector("#clossmodal") ; 
 let tablecoour = document.querySelector("#tableuCours")
 
-showPage('cours');
+showPage('dashboard');
 
 function showPage(page) {
     document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
@@ -35,7 +35,14 @@ tablecoour.addEventListener("click" , (e) => {
             .catch(error => console.log(error)) 
              
     }else if (e.target.closest(".supprumer")){
-        let supprumerid = e.target.closest("[data-id]").dataset.id ;
+        let supprumerid = e.target.closest("[data-id]").dataset.id;
+
+        let conf = confirm("Are you sure you want to delete this course?");
+
+        if(conf) {
+            deletcours(supprumerid)
+            
+        }
     }
 })
 
@@ -65,7 +72,7 @@ function createEditModal(data) {
                 </h2>
 
                 <form id="editCoursForm">
-                    <input type="hidden" id="edit-id" value="${data.id}">
+                    <input type="hidden" id="edit-id" name="id" value="${data.id}">
 
                     <label class="block mb-2 font-semibold text-gray-700">Nom</label>
                     <input id="edit-nom" name="nom" type="text" value="${data.nom}" 
@@ -131,6 +138,62 @@ function createEditModal(data) {
     closeBtn.addEventListener("click", closeModal);
     cancelBtn.addEventListener("click", closeModal);
 
-    
+    editForm.addEventListener("submit" , (e) => {
 
+        e.preventDefault() ; 
+
+        const formData = new FormData(editForm);
+
+
+        const datamodifier = Object.fromEntries(formData);
+
+        fetch("src/php/modifieronbasddoner.php" , {
+            method : "POST",
+            headers : {"Content-Type" : "application/json"},
+            body : JSON.stringify({ newdata : datamodifier })
+        }) 
+            .then(res => res.json())
+            .then(newdata => {
+                console.log(newdata) ;
+                let row = document.querySelector(`[data-id='${newdata.id}']`)
+                if(row) {
+                    row.innerHTML = ``
+                    row.innerHTML = `
+                        <td class="px-6 py-4 text-left font-bold"> ${newdata.nom} </td>
+                        <td class="px-6 py-4 text-left font-bold"> ${newdata.categorie} </td>
+                        <td class="px-6 py-4 text-left font-bold"> ${newdata.heure} </td>
+                        <td class="px-6 py-4 text-left font-bold"> ${newdata.date} </td>
+                        <td class="px-6 py-4 text-left font-bold"> ${newdata.duree} </td>
+                        <td class="px-6 py-4 text-left font-bold"> ${newdata.max_participants} </td>
+                        <td class="px-6 py-4 text-left font-bold">
+                            <svg xmlns="http://www.w3.org/2000/svg" data-id="${newdata.id}" class="modifier size-5 cursor-pointer" viewBox="0 0 26 26">
+                                <path fill="#000000" d="M20.094.25a2.245 2.245 0 0 0-1.625.656l-1 1.031l6.593 6.625l1-1.03a2.319 2.319 0 0 0 0-3.282L21.75.937A2.36 2.36 0 0 0 20.094.25zm-3.75 2.594l-1.563 1.5l6.875 6.875L23.25 9.75l-6.906-6.906zM13.78 5.438L2.97 16.155a.975.975 0 0 0-.5.625L.156 24.625a.975.975 0 0 0 1.219 1.219l7.844-2.313a.975.975 0 0 0 .781-.656l10.656-10.563l-1.468-1.468L8.25 21.813l-4.406 1.28l-.938-.937l1.344-4.593L15.094 6.75L13.78 5.437zm2.375 2.406l-10.968 11l1.593.343l.219 1.47l11-10.97l-1.844-1.843z"/>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" data-id="<?= $courrentrow['id'] ?>" class="supprumer size-5 cursor-pointer" viewBox="0 0 24 24">
+                                <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m19.5 5.5l-.62 10.025c-.158 2.561-.237 3.842-.88 4.763a4 4 0 0 1-1.2 1.128c-.957.584-2.24.584-4.806.584c-2.57 0-3.855 0-4.814-.585a4 4 0 0 1-1.2-1.13c-.642-.922-.72-2.205-.874-4.77L4.5 5.5M3 5.5h18m-4.944 0l-.683-1.408c-.453-.936-.68-1.403-1.071-1.695a2 2 0 0 0-.275-.172C13.594 2 13.074 2 12.035 2c-1.066 0-1.599 0-2.04.234a2 2 0 0 0-.278.18c-.395.303-.616.788-1.058 1.757L8.053 5.5m1.447 11v-6m5 6v-6" color="currentColor"/>
+                            </svg>
+                        </td>               
+                    `
+                }
+                closeModal() ;
+                
+            })
+            .catch(error => console.error(error))
+    })
+
+}
+
+
+function deletcours(id) {
+    fetch("src/php/deelete.php" , {
+        method : "POST" , 
+        headers : {"Content-Type" : "application/x-www-form-urlencoded"} ,
+        body : "id=" + id
+    })
+        .then(rep => rep.text())
+        .then(data => {
+            console.log(data)
+            document.querySelector(`[data-id='${id}']`).remove() ; 
+        })
+        .catch(error => console.error(error))
 }

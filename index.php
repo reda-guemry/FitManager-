@@ -1,5 +1,8 @@
 <?php
-    include("src/php/connectbasddoner.php")
+    include("src/php/connectbasddoner.php") ; 
+
+    $queryfromtable = $connnect -> query("SELECT COUNT(*) AS total FROM cours") ;
+    $nombretotal = $queryfromtable -> fetch_assoc() ;
 ?>
 
 
@@ -54,7 +57,7 @@
                             <div class="flex justify-between items-start">
                                 <div>
                                     <p class="text-blue-100 text-sm font-medium mb-2">Total Cours</p>
-                                    <p id="total-cours" class="text-4xl font-bold">0</p>
+                                    <p id="total-cours" class="text-4xl font-bold"><?= $nombretotal["total"] ?></p>
                                 </div>
                                 <i class="fas fa-graduation-cap text-5xl text-blue-300 opacity-50"></i>
                             </div>
@@ -134,7 +137,7 @@
                                 </thead>
                                 <tbody id="cours-table-body" class="divide-y divide-gray-200">
                                     <?php while ($courrentrow = $cours -> fetch_assoc()){   ?> 
-                                        <tr>
+                                        <tr data-id="<?= $courrentrow['id'] ?>">
                                             <td class="px-6 py-4 text-left font-bold"><?= $courrentrow['nom'] ?></td>
                                             <td class="px-6 py-4 text-left font-bold"><?= $courrentrow['categorie'] ?></td>
                                             <td class="px-6 py-4 text-left font-bold"><?= $courrentrow['heure'] ?></td>
@@ -225,7 +228,7 @@
                     <i class="fas fa-edit"></i> add new cour
                 </h2>
 
-                <form id="editCoursForm" method="post" action="src/php/ajouter.php" >
+                <form method="post" action="src/php/ajouter.php" >
 
                     <label class="block mb-2 font-semibold text-gray-700">name</label>
                     <input id="edit-nom" name="nom" type="text" class="w-full mb-4 p-3 rounded-lg border focus:ring-2 focus:ring-indigo-600">
