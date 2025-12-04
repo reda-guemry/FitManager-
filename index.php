@@ -120,10 +120,9 @@
 
                     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                         <div class="overflow-x-auto">
-                            <table class="w-full">
+                            <table id="tableuCours" class="w-full">
                                 <thead class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
                                     <tr>
-                                        <th class="px-6 py-4 text-left">ID</th>
                                         <th class="px-6 py-4 text-left">Nom</th>
                                         <th class="px-6 py-4 text-left">Catégorie</th>
                                         <th class="px-6 py-4 text-left">Heure</th>
@@ -136,7 +135,6 @@
                                 <tbody id="cours-table-body" class="divide-y divide-gray-200">
                                     <?php while ($courrentrow = $cours -> fetch_assoc()){   ?> 
                                         <tr>
-                                            <td class="px-6 py-4 text-left font-bold"><?= $courrentrow['id'] ?></td>
                                             <td class="px-6 py-4 text-left font-bold"><?= $courrentrow['nom'] ?></td>
                                             <td class="px-6 py-4 text-left font-bold"><?= $courrentrow['categorie'] ?></td>
                                             <td class="px-6 py-4 text-left font-bold"><?= $courrentrow['heure'] ?></td>
@@ -144,10 +142,10 @@
                                             <td class="px-6 py-4 text-left font-bold"><?= $courrentrow['duree'] ?></td>
                                             <td class="px-6 py-4 text-left font-bold"><?= $courrentrow['max_participants'] ?></td>
                                             <td class="px-6 py-4 text-left font-bold">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class=" size-5 cursor-pointer" viewBox="0 0 26 26">
+                                                <svg xmlns="http://www.w3.org/2000/svg" data-id="<?= $courrentrow['id'] ?>" class="modifier size-5 cursor-pointer" viewBox="0 0 26 26">
                                                     <path fill="#000000" d="M20.094.25a2.245 2.245 0 0 0-1.625.656l-1 1.031l6.593 6.625l1-1.03a2.319 2.319 0 0 0 0-3.282L21.75.937A2.36 2.36 0 0 0 20.094.25zm-3.75 2.594l-1.563 1.5l6.875 6.875L23.25 9.75l-6.906-6.906zM13.78 5.438L2.97 16.155a.975.975 0 0 0-.5.625L.156 24.625a.975.975 0 0 0 1.219 1.219l7.844-2.313a.975.975 0 0 0 .781-.656l10.656-10.563l-1.468-1.468L8.25 21.813l-4.406 1.28l-.938-.937l1.344-4.593L15.094 6.75L13.78 5.437zm2.375 2.406l-10.968 11l1.593.343l.219 1.47l11-10.97l-1.844-1.843z"/>
                                                 </svg>
-                                                <svg xmlns="http://www.w3.org/2000/svg" class=" size-5 cursor-pointer" viewBox="0 0 24 24">
+                                                <svg xmlns="http://www.w3.org/2000/svg" data-id="<?= $courrentrow['id'] ?>" class="supprumer size-5 cursor-pointer" viewBox="0 0 24 24">
                                                     <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m19.5 5.5l-.62 10.025c-.158 2.561-.237 3.842-.88 4.763a4 4 0 0 1-1.2 1.128c-.957.584-2.24.584-4.806.584c-2.57 0-3.855 0-4.814-.585a4 4 0 0 1-1.2-1.13c-.642-.922-.72-2.205-.874-4.77L4.5 5.5M3 5.5h18m-4.944 0l-.683-1.408c-.453-.936-.68-1.403-1.071-1.695a2 2 0 0 0-.275-.172C13.594 2 13.074 2 12.035 2c-1.066 0-1.599 0-2.04.234a2 2 0 0 0-.278.18c-.395.303-.616.788-1.058 1.757L8.053 5.5m1.447 11v-6m5 6v-6" color="currentColor"/>
                                                 </svg>
                                             </td>
@@ -262,7 +260,7 @@
 
                 </form>
             </div>
-                
+             
         </main>
 
 

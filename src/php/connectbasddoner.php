@@ -1,10 +1,6 @@
 <?php
-  $host = "localhost" ;
-  $user = "root" ; 
-  $password = "root" ;
-  $databse = "brief_sql" ;
   
-  $connnect = new mysqli($host , $user , $password , $databse) ;
+  $connnect = new mysqli("localhost" , "root" , "root" , "brief_sql") ;
 
   if($connnect -> connect_error) {
     die("Connection failed: " . $conn->connect_error);
