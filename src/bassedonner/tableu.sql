@@ -61,4 +61,8 @@ VALUES  (1, 1),
 
 
 
-SELECT * FROM cours 
+ALTER TABLE cours MODIFY heure Time ;
+
+
+DELETE FROM cours_equipement;
+DELETE FROM cours;

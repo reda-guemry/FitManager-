@@ -1,21 +1,5 @@
 <?php
-  $host = "localhost" ;
-  $user = "root" ; 
-  $password = "root" ;
-  $databse = "brief_sql" ;
-  
-  $connnect = new mysqli($host , $user , $password , $databse) ;
-
-  if($connnect -> connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-  }
-
-  $cours = $connnect -> query("SELECT * FROM cours") ; 
-  $equipement = $connnect -> query ("SELECT * FROM equipement");
-
-
-
-//   die($equipement -> fetch_assoc()["id"]) ; 
+    include("src/php/connectbasddoner.php")
 ?>
 
 
@@ -128,7 +112,7 @@
                             <i class="fas fa-calendar-alt text-indigo-600"></i>
                             Gestion des Cours
                         </h2>
-                        <button onclick="openModal('cours')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 shadow-lg transform hover:scale-105 transition-all">
+                        <button id="addCours" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 shadow-lg transform hover:scale-105 transition-all">
                             <i class="fas fa-plus"></i>
                             Nouveau Cours
                         </button>
@@ -211,7 +195,14 @@
                                             <th class="px-6 py-4 text-left"><?= $courrentequi["type"] ?></th>
                                             <th class="px-6 py-4 text-left"><?= $courrentequi["quuantiter"] ?></th>
                                             <th class="px-6 py-4 text-left"><?= $courrentequi["etat"] ?></th>
-                                            <th class="px-6 py-4 text-center">Actions</th>
+                                            <td class="px-6 py-4 text-left font-bold">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class=" size-5 cursor-pointer" viewBox="0 0 26 26">
+                                                    <path fill="#000000" d="M20.094.25a2.245 2.245 0 0 0-1.625.656l-1 1.031l6.593 6.625l1-1.03a2.319 2.319 0 0 0 0-3.282L21.75.937A2.36 2.36 0 0 0 20.094.25zm-3.75 2.594l-1.563 1.5l6.875 6.875L23.25 9.75l-6.906-6.906zM13.78 5.438L2.97 16.155a.975.975 0 0 0-.5.625L.156 24.625a.975.975 0 0 0 1.219 1.219l7.844-2.313a.975.975 0 0 0 .781-.656l10.656-10.563l-1.468-1.468L8.25 21.813l-4.406 1.28l-.938-.937l1.344-4.593L15.094 6.75L13.78 5.437zm2.375 2.406l-10.968 11l1.593.343l.219 1.47l11-10.97l-1.844-1.843z"/>
+                                                </svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" class=" size-5 cursor-pointer" viewBox="0 0 24 24">
+                                                    <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m19.5 5.5l-.62 10.025c-.158 2.561-.237 3.842-.88 4.763a4 4 0 0 1-1.2 1.128c-.957.584-2.24.584-4.806.584c-2.57 0-3.855 0-4.814-.585a4 4 0 0 1-1.2-1.13c-.642-.922-.72-2.205-.874-4.77L4.5 5.5M3 5.5h18m-4.944 0l-.683-1.408c-.453-.936-.68-1.403-1.071-1.695a2 2 0 0 0-.275-.172C13.594 2 13.074 2 12.035 2c-1.066 0-1.599 0-2.04.234a2 2 0 0 0-.278.18c-.395.303-.616.788-1.058 1.757L8.053 5.5m1.447 11v-6m5 6v-6" color="currentColor"/>
+                                                </svg>
+                                            </td>
                                         </tr>
 
                                     <?php } ?> 
@@ -223,29 +214,55 @@
             </main>
         </div>
 
-        <!-- Modal -->
-        <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
-            <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                <div class="sticky top-0 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-4 flex justify-between items-center">
-                    <h3 id="modal-title" class="text-xl font-bold"></h3>
-                    <button onclick="closeModal()" class="text-white hover:text-gray-200">
-                        <i class="fas fa-times text-2xl"></i>
+       <!-- Modal Edit Cours -->
+        <div id="addcoursmodal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center z-50">
+            <div class="bg-white w-1/2 ax-w-lg rounded-2xl shadow-2xl p-8 relative">
+
+                <!-- Close Button -->
+                <button id="clossmodal"  class="absolute top-4 right-4 text-gray-500 hover:text-red-600 text-2xl cursor-pointer">
+                    &times;
+                </button>
+
+                <h2 class="text-2xl font-bold mb-6 text-indigo-700 flex items-center gap-2">
+                    <i class="fas fa-edit"></i> add new cour
+                </h2>
+
+                <form id="editCoursForm" method="post" action="src/php/ajouter.php" >
+
+                    <label class="block mb-2 font-semibold text-gray-700">name</label>
+                    <input id="edit-nom" name="nom" type="text" class="w-full mb-4 p-3 rounded-lg border focus:ring-2 focus:ring-indigo-600">
+
+                    <label class="block mb-2 font-semibold text-gray-700">Catégorie</label>
+                    <input id="edit-categorie" name="categorie" type="text" class="w-full mb-4 p-3 rounded-lg border focus:ring-2 focus:ring-indigo-600">
+
+                    <label class="block mb-2 font-semibold text-gray-700">Heure</label>
+                    <input id="edit-heure" name="heure" type="time" class="w-full mb-4 p-3 rounded-lg border focus:ring-2 focus:ring-indigo-600">
+
+                    <label class="block mb-2 font-semibold text-gray-700">Date</label>
+                    <select class="w-full p-2 border rounded-lg" name="day" id="day">
+                        <option value="" >Select a day</option>
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                        <option value="Sunday">Sunday</option>
+                    </select>
+
+                    <label class="block mb-2 font-semibold text-gray-700">Durée (min)</label>
+                    <input id="edit-duree" name="duree" type="number" class="w-full mb-4 p-3 rounded-lg border focus:ring-2 focus:ring-indigo-600">
+
+                    <label class="block mb-2 font-semibold text-gray-700">Max Participants</label>
+                    <input id="edit-max" name="number" type="number" class="w-full mb-6 p-3 rounded-lg border focus:ring-2 focus:ring-indigo-600">
+
+                    <button type="submit" name="addcours"
+                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold transition-all"> Add 
                     </button>
-                </div>
-                <form id="modal-form" class="p-6">
-                    <div id="form-fields" class="space-y-4"></div>
-                    <div class="flex gap-4 mt-6">
-                        <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-semibold transition-colors">
-                            <i class="fas fa-save mr-2"></i>Enregistrer
-                        </button>
-                        <button type="button" onclick="closeModal()" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 py-3 rounded-lg font-semibold transition-colors">
-                            <i class="fas fa-times mr-2"></i>Annuler
-                        </button>
-                    </div>
+
                 </form>
             </div>
-        </div>
-
+                
         </main>
 
 

@@ -4,7 +4,18 @@ function showPage(page) {
     document.getElementById(page).classList.remove('hidden');
 
     document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('bg-white/20'));
-    event.target.closest('a').classList.add('bg-white/20');
+    
 }
 
-showPage('equipement');
+showPage('cours');
+
+
+let butadd = document.querySelector("#addCours") ; 
+let closmdol = document.querySelector("#clossmodal")
+
+butadd.addEventListener("click" , () => {
+    document.querySelector("#addcoursmodal").classList.remove("hidden") ;
+})
+closmdol.addEventListener("click" , () => {
+    document.querySelector("#addcoursmodal").classList.add("hidden") ;
+})
