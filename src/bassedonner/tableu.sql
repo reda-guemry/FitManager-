@@ -66,3 +66,6 @@ ALTER TABLE cours MODIFY heure Time ;
 
 DELETE FROM cours_equipement;
 DELETE FROM cours;
+
+
+SELECT COUNT(etat) AS count , etat FROM equipement GROUP BY(etat) 

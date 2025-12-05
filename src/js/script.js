@@ -6,7 +6,7 @@ let buttnopenmodal = document.querySelector("#openmodaladdequi")
 let closmodal = document.querySelector("#closeAddEquipModal")
 let tableEqui = document.querySelector("#tableequipement")
 
-showPage('equipement');
+showPage('dashboard');
 
 function showPage(page) {
     document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
@@ -53,7 +53,6 @@ tablecoour.addEventListener("click" , (e) => {
 
         if(conf) {
             deletcours(supprumerid)
-            
         }
     }
 })
@@ -70,7 +69,13 @@ tableEqui.addEventListener("click" , (e) => {
             .then(data => createmodalmodifequi(data)) 
             .catch(error => console.error(error))
     }else if(e.target.closest(".suppresion")){
-        console.log("khezofu")
+        let supprumerid = e.target.closest("[data-id]").dataset.id;
+
+        let conf = confirm("Are you sure you want to delete this course?");
+        
+        if(conf) { 
+            deletequip(supprumerid) ;
+        }
     }
 })
 
@@ -79,11 +84,8 @@ tableEqui.addEventListener("click" , (e) => {
 
 // Function to create edit modal dynamically
 function createEditModal(data) {
-    // Remove existing edit modal if any
-    const existingModal = document.querySelector("#editcoursmodal");
-    if (existingModal) {
-        existingModal.remove();
-    }
+    
+    console.log(data)
 
     // Create modal HTML
     const modalHTML = `
@@ -123,22 +125,22 @@ function createEditModal(data) {
                     <label class="block mb-2 font-semibold text-gray-700">Date</label>
                     <select class="w-full mb-4 p-3 border rounded-lg focus:ring-2 focus:ring-indigo-600" name="day" id="edit-day" require>
                         <option value="" disabled selected hidden>Select a day</option>
-                        <option value="Monday" ${data.day === 'Monday' ? 'selected' : ''}>Monday</option>
-                        <option value="Tuesday" ${data.day === 'Tuesday' ? 'selected' : ''}>Tuesday</option>
-                        <option value="Wednesday" ${data.day === 'Wednesday' ? 'selected' : ''}>Wednesday</option>
-                        <option value="Thursday" ${data.day === 'Thursday' ? 'selected' : ''}>Thursday</option>
-                        <option value="Friday" ${data.day === 'Friday' ? 'selected' : ''}>Friday</option>
-                        <option value="Saturday" ${data.day === 'Saturday' ? 'selected' : ''}>Saturday</option>
-                        <option value="Sunday" ${data.day === 'Sunday' ? 'selected' : ''}>Sunday</option>
+                        <option value="Monday" ${data.date === 'Monday' ? 'selected' : ''}>Monday</option>
+                        <option value="Tuesday" ${data.date === 'Tuesday' ? 'selected' : ''}>Tuesday</option>
+                        <option value="Wednesday" ${data.date === 'Wednesday' ? 'selected' : ''}>Wednesday</option>
+                        <option value="Thursday" ${data.date === 'Thursday' ? 'selected' : ''}>Thursday</option>
+                        <option value="Friday" ${data.date === 'Friday' ? 'selected' : ''}>Friday</option>
+                        <option value="Saturday" ${data.date === 'Saturday' ? 'selected' : ''}>Saturday</option>
+                        <option value="Sunday" ${data.date === 'Sunday' ? 'selected' : ''}>Sunday</option>
                     </select>
 
                     <label class="block mb-2 font-semibold text-gray-700">Durée (min)</label>
                     <input id="edit-duree" name="duree" type="number" value="${data.duree}" 
-                           class="w-full mb-4 p-3 rounded-lg border focus:ring-2 focus:ring-indigo-600">
+                           class="w-full mb-4 p-3 rounded-lg border focus:ring-2 focus:ring-indigo-600" min="10" max="60" >
 
                     <label class="block mb-2 font-semibold text-gray-700">Max Participants</label>
                     <input id="edit-max" name="number" type="number" value="${data.max_participants || data.number}" 
-                           class="w-full mb-6 p-3 rounded-lg border focus:ring-2 focus:ring-indigo-600">
+                           class="w-full mb-6 p-3 rounded-lg border focus:ring-2 focus:ring-indigo-600"  min="1" max="50">
 
                     <div class="flex gap-4">
                         <button type="submit" 
@@ -346,4 +348,19 @@ function createmodalmodifequi(data) {
             })
             .catch(error => console.error(error))
     });
+}
+
+function deletequip(id) {
+    fetch("src/php/deletequipe.php" , {
+        method : "POST" , 
+        headers : {"Content-Type" : "application/x-www-form-urlencoded"} , 
+        body : "id=" + id
+    })
+        .then(rep => rep.text())
+        .then(data => { 
+             console.log(data)
+             document.querySelector(`[data-id='${id}']`).remove() ; 
+        })
+        .catch(error => console.error(error))
+
 }

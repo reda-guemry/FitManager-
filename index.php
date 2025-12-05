@@ -10,6 +10,9 @@
     $maxpatienter = $connnect -> query("SELECT SUM(max_participants) AS total FROM cours" ) ;
     $totalpartic = $maxpatienter -> fetch_assoc() ; 
 
+    $categorie = $connnect -> query("SELECT COUNT(categorie) AS count , categorie FROM cours GROUP BY(categorie) ") ; 
+    $etet = $connnect -> query("SELECT COUNT(etat) AS count , etat FROM equipement GROUP BY(etat)") ;
+
 ?>
 
 
@@ -105,12 +108,26 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="bg-white rounded-xl shadow-lg p-6">
                             <h3 class="text-xl font-bold text-gray-800 mb-4">Répartition des Cours</h3>
-                            <canvas id="coursChart"></canvas>
+                            <div id="coursChart">
+                                <?php while($rowcat = $categorie -> fetch_assoc()) {  ?>
+                                    <p class="flex items-center justify-between bg-gray-100 px-4 py-2 rounded-lg mb-2 text-gray-700 font-medium">
+                                        <?= $rowcat["categorie"] ?>
+                                        <span class="text-blue-600 font-bold"><?= $rowcat["count"] ?></span>
+                                    </p>
+                                <?php } ?>
+                            </div>
                         </div>
 
                         <div class="bg-white rounded-xl shadow-lg p-6">
                             <h3 class="text-xl font-bold text-gray-800 mb-4">État des Équipements</h3>
-                            <canvas id="equipementChart"></canvas>
+                            <div>
+                                <?php while($rowcate = $etet -> fetch_assoc()) {  ?>
+                                    <p class="flex items-center justify-between bg-gray-100 px-4 py-2 rounded-lg mb-2 text-gray-700 font-medium">
+                                        <?= $rowcate["etat"] ?>
+                                        <span class="text-blue-600 font-bold"><?= $rowcate["count"] ?></span>
+                                    </p>
+                                <?php } ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -264,10 +281,10 @@
                     </select>
 
                     <label class="block mb-2 font-semibold text-gray-700">Durée (min)</label>
-                    <input id="edit-duree" name="duree" type="number" class="w-full mb-4 p-3 rounded-lg border focus:ring-2 focus:ring-indigo-600" require>
+                    <input id="edit-duree" name="duree" type="number" class="w-full mb-4 p-3 rounded-lg border focus:ring-2 focus:ring-indigo-600" min="10" max="60" require>
 
                     <label class="block mb-2 font-semibold text-gray-700">Max Participants</label>
-                    <input id="edit-max" name="number" type="number" class="w-full mb-6 p-3 rounded-lg border focus:ring-2 focus:ring-indigo-600" require>
+                    <input id="edit-max" name="number" type="number" class="w-full mb-6 p-3 rounded-lg border focus:ring-2 focus:ring-indigo-600" min="1" max="50" require>
 
                     <button type="submit" name="addcours"
                         class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold transition-all"> Add 
