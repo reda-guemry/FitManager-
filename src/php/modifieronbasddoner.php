@@ -21,17 +21,9 @@
 
     $upate = $connnect -> query($modif) ; 
 
-    if($upate) {
-        $succermodif = $connnect -> query("SELECT * FROM cours WHERE id = '$idcherch' ") ;
-        $modifirow = $succermodif -> fetch_assoc() ;
-        echo json_encode($modifirow) ; 
-    } else {
-        echo json_encode([
-            "error" => "SQL ERROR",
-            "message" => $connnect->error,
-            "query" => $modif
-        ]);
-        exit;  
-    }
+    $succermodif = $connnect -> query("SELECT * FROM cours WHERE id = '$idcherch' ") ;
+    $modifirow = $succermodif -> fetch_assoc() ;
+    echo json_encode($modifirow) ; 
+
     
 ?> 

@@ -4,3 +4,5 @@ node_modules
 src/css/output.css
 
 note.txt
+
+.vscode
